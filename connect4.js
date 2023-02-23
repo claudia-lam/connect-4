@@ -18,9 +18,7 @@ const board = []; // array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
-
   for (let y = 0; y < HEIGHT; y++) {
-
     const row = [];
     for (let x = 0; x < WIDTH; x++) {
       row.push(null);
@@ -45,19 +43,18 @@ function makeHtmlBoard() {
   //add cell to top row
   for (let x = 0; x < WIDTH; x++) {
     const headCell = document.createElement("td");
-    headCell.setAttribute("id", `top-${x}`);
+    headCell.setAttribute("id", `${x}`);
     top.append(headCell);
   }
   htmlBoard.append(top);
 
-
   for (let y = 0; y < HEIGHT; y++) {
-    const row = document.createElement("tr")
+    const row = document.createElement("tr");
 
     for (let x = 0; x < WIDTH; x++) {
-      const cell = document.createElement("td")
-      cell.setAttribute("id", `c-${y}-${x}`)
-      row.append(cell)
+      const cell = document.createElement("td");
+      cell.setAttribute("id", `c-${y}-${x}`);
+      row.append(cell);
     }
     htmlBoard.append(row);
   }
@@ -73,7 +70,18 @@ function findSpotForCol(x) {
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
+  console.log("topX:", x);
   // TODO: make a div and insert into correct table cell
+  //create a div
+  const piece = document.createElement("div");
+  //create a class class piece on new div
+  piece.classList.add("piece");
+  piece.classList.add(`p${currPlayer}`);
+  //get the cell coordinates
+  const cell = document.getElementById(`c-${y}-${x}`);
+  //append new div to cell
+  console.log("cell", `c-${y}-${x}`);
+  cell.append(piece);
 }
 
 /** endGame: announce game end */
@@ -87,6 +95,9 @@ function endGame(msg) {
 function handleClick(evt) {
   // get x from ID of clicked cell
   const x = +evt.target.id;
+  console.log(evt.target);
+
+  console.log("check x", evt.target.id);
 
   // get next spot in column (if none, ignore click)
   const y = findSpotForCol(x);
