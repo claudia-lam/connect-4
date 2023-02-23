@@ -93,11 +93,9 @@ function endGame(msg) {
 /** handleClick: handle click of column top to play piece */
 
 function handleClick(evt) {
+
   // get x from ID of clicked cell
   const x = +evt.target.id;
-  console.log(evt.target);
-
-  console.log("check x", evt.target.id);
 
   // get next spot in column (if none, ignore click)
   const y = findSpotForCol(x);
@@ -105,6 +103,14 @@ function handleClick(evt) {
     return;
   }
 
+  board[y][x] = currPlayer;
+
+  currPlayer === 1 ? 2 : 1;
+
+  isBoardFilled(board);
+
+  console.log("board", board[y][x]);
+  console.log("clickevt", `c-${y}-${x}`);
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
   placeInTable(y, x);
@@ -112,6 +118,12 @@ function handleClick(evt) {
   // check for win
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
+  }
+
+  function isBoardFilled (board) {
+    for(let row of board){
+      row.every(cell => cell !== null)
+    }
   }
 
   // check for tie
