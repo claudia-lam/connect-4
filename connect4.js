@@ -21,7 +21,7 @@ function makeBoard() {
   for (let y = 0; y < HEIGHT; y++) {
     const row = [];
     for (let x = 0; x < WIDTH; x++) {
-      row.push(null);
+      row.push(undefined);
     }
     board.push(row);
   }
@@ -43,7 +43,7 @@ function makeHtmlBoard() {
   //add cell to top row
   for (let x = 0; x < WIDTH; x++) {
     const headCell = document.createElement("td");
-    headCell.setAttribute("id", `${x}`);
+    headCell.setAttribute("id", `top-${x}`);
     top.append(headCell);
   }
   htmlBoard.append(top);
@@ -62,9 +62,15 @@ function makeHtmlBoard() {
 
 /** findSpotForCol: given column x, return bottom empty y (null if filled) */
 
+//change i to y
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 5
-  return 5;
+  for (let i = HEIGHT - 1; i >= 0; i--) {
+    //check if board[i][x] is null
+    if (board[i][x] === undefined) return i;
+    //if it is null then retun i
+  }
+  return null;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
@@ -93,9 +99,10 @@ function endGame(msg) {
 /** handleClick: handle click of column top to play piece */
 
 function handleClick(evt) {
-
   // get x from ID of clicked cell
-  const x = +evt.target.id;
+  let x = evt.target.id; //change name of x
+  x = +x.replace("top-", ""); //declare variable x
+  console.log(x);
 
   // get next spot in column (if none, ignore click)
   const y = findSpotForCol(x);
@@ -104,8 +111,6 @@ function handleClick(evt) {
   }
 
   board[y][x] = currPlayer;
-
-  currPlayer === 1 ? 2 : 1;
 
   isBoardFilled(board);
 
@@ -120,17 +125,19 @@ function handleClick(evt) {
     return endGame(`Player ${currPlayer} won!`);
   }
 
-  function isBoardFilled (board) {
-    for(let row of board){
-      row.every(cell => cell !== null)
+  // check for tie
+  // TODO: check if all cells in board are filled; if so call, call endGame
+  //todo
+  function isBoardFilled(board) {
+    for (let row of board) {
+      row.every((cell) => cell !== undefined);
     }
   }
 
-  // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
-
   // switch players
   // TODO: switch currPlayer 1 <-> 2
+  //simplify ternary
+  currPlayer = currPlayer === 1 ? 2 : 1;
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
